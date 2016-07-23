@@ -1,0 +1,2306 @@
+
+<html>
+<head>
+<style>
+
+#header {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+   padding:5px;
+height : 20px;
+width : 1170;	 	 
+}
+</style>
+</head>
+
+
+<div id="header"></div>
+<div style="width: 1180px; height: 50px; overflow: hidden; display: inline-block; background-color:#eeeeee;">
+<table width="600">
+
+<form action="animatemirror.html" method="post" enctype="multipart/form-data">
+	<tr>
+	<td width="30%">Comparison</td>
+	<td><button type="submit" >Click me</button></td>
+	</tr>
+<tr>
+	<td>Back</td>
+	<td><button type="submit"  formaction= "update6.html">Click me</button></td>
+	</tr>
+
+
+
+
+	
+</table>
+
+</div>
+
+
+
+</html>
+
+
+
+
+
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+
+<script src="../d3.min.js"></script>
+
+<style type="text/css">
+
+body { 
+font: 8px Arial;	
+     }
+
+#up {
+      	position: absolute;
+      	top: 90px;
+      }
+      #up {
+      	left: 190px;
+      }
+      
+</style>
+
+<body>
+
+
+
+
+<script type= "text/javascript">
+
+
+
+var inc=300;
+		var yearvalue;
+
+		var width = 1180,
+      	    	    height = 550;
+
+		var svg = d3.select("body").append("svg")
+      			.attr("width", width)
+      			.attr("height", height)
+			.style("background-color" , "lightgray");
+
+
+		var projection = d3.geo.mercator()
+     	 		.center([89, 26 ])
+     	 		.scale(600)
+       	 		.rotate([0,0]);
+
+		var path = d3.geo.path()
+      			.projection(projection);
+
+
+		var g = svg.append("g");
+		var r= g.append("g");
+
+
+
+
+
+var expp=d3.scale.linear().range([0,25]).domain([0,10]);
+
+
+var dropp=d3.scale.linear().range([0,20]).domain([0,100]);
+
+
+
+
+var zoomListener = d3.behavior.zoom()
+  			.scaleExtent([0.5, 4])
+  			.on("zoom", function(){
+ 			g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+					});
+
+r.selectAll("rect").remove();
+g.selectAll("path").remove();
+
+
+
+
+
+
+//d3.selectAll("text").remove();
+
+
+
+
+	
+zoomListener(g);
+
+var rec=[450,270];
+var rec1=[580,120];
+var rec2=[80,250];
+var rec3=[390,-20];
+var rec4=[50,10];
+
+var pwidth;
+
+var array;
+var jsonc;	
+var exp;
+var enrol;
+var prim;
+var pop;
+var popu;
+var drop;
+var ex;
+var en;
+var dro;
+var out;
+var ot;
+var sum;
+var population;
+
+var x1=100;
+var y1=100;
+
+var store=0;
+var expi=[];
+var enroli=[];
+var primi=[];
+var dropi=[];
+var outi= [];
+
+
+
+
+
+//==========================================================
+
+
+
+var y =[];
+for(var year = 1971; year<2016; year++)
+{
+y.push(year);
+}
+
+var y_idx =0;
+
+
+var y_interval = setInterval (function() {
+
+
+visual(y[y_idx]);
+
+y_idx++;
+
+if(y_idx>=y.length)
+{
+clearInterval(y_interval);
+}
+
+
+
+
+ } , 700);
+
+
+
+
+
+
+function visual(y)
+{
+
+
+
+d3.json("asia1.json", function(json){
+
+
+	d3.csv("eduseries.csv", function(data){ 
+	
+
+// side arrows
+
+d3.selectAll("text").remove();
+
+
+
+svg.append("text")
+.attr("x", 10)
+.attr("y", 20)
+.attr("stroke","black")
+.attr("font-size" , "12pt")
+.text("Year :   " + y);
+
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "yellowgreen")
+ 		.style("fill", "yellowgreen")
+		.attr("points" , "870,30,  870,60, 880,45")
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 50)
+.text("Primary Completion Rate")
+.attr('font-size','10pt');
+
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "darkorange")
+ 		.style("fill", "darkorange")
+		.attr("points" , "870,70,  870,100, 880,85")
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 90)
+.text("Drop Out Rate")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "crimson")
+ 		.style("fill", "crimson")
+		.attr("points" , "870,110,  870,140, 880,125");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 130)
+.text("Out of School Children")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "hotpink")
+ 		.style("fill", "hotpink")
+		.attr("points" , "870,150,  870,180, 880,165");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 170)
+.text("Govt. Expenditure as % of GDP")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "blue")
+ 		.style("fill", "blue")
+		.attr("points" , "870,190,  870,220, 880,205");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 210)
+.text("Total Population 0-14 age")
+.attr('font-size','10pt');
+
+
+
+
+
+// for population max and min value
+
+ 
+ data.forEach(function(d) {
+    d.popu = +d.popu;
+ });
+
+
+data.forEach(function(d) {
+    d.enroll = +d.enroll;
+ });
+
+//var enr=d3.scale.linear().range([0,50]).domain([0, d3.max(data, function(d) { return d.enroll; })]);
+
+data.forEach(function(d) {
+    d.outof = +d.outof;
+ });
+
+var outof=d3.scale.linear().range([1,25]).domain([d3.min(data, function(d) { return d.outof; }), d3.max(data, function(d) { return d.outof; })]);
+
+var enrmax = d3.max(data, function(d) { return d.enroll; });
+//window.alert(enrmax)
+
+ 
+
+
+
+                    g.selectAll("path")
+                   	.data(json.features)
+                   	.enter()
+                   	.append("path")
+                   	.attr("d", path)
+			.attr("stroke" , "royalblue")
+			.attr("stroke-width", 1)
+                        .style("fill", "white");
+
+
+
+
+			g.selectAll("text")
+
+               		.data(json.features)
+                	.enter()
+                	.append("text")
+			.attr("transform",function(d){                 
+   				 var tex = projection(d3.geo.centroid(d));
+    				return "translate("+tex+")"; })
+			.text(function(d,i){return d.properties.name;})
+			.attr("font-size","8pt")
+			.attr("font-weight" , "BOLD")
+			.style("fill", "black");
+
+
+
+
+for ( pj=0; pj< json.features.length; pj++)
+	{
+
+var jsonc = json.features[pj].properties.name;
+
+
+
+for(var p=0; p<data.length; p++)
+			
+			{
+
+			var datac= data[p].country;
+			//window.alert(datac)
+if (jsonc == datac)
+{
+
+		
+if(data[p].year == y){
+
+
+
+
+//q1=pj;
+
+expen=data[p].expenditure;
+
+
+expi[pj]=expen;
+
+//window.alert(expi[pj])
+
+
+
+				popu= data[p].popu;
+
+			
+population = data[p].population;
+
+				prim= data[p].primary;
+//primi[i]=prim;
+				enrol= data[p].enroll;
+
+//enroli[i]=enrol;
+				drop= data[p].drop;
+//dropi[i]=drop;
+				out = data[p].unenroll;
+//outi[i]=out;
+
+				sum= data[p].ensumun;
+//window.alert(expi[mm])
+
+				exp= expp(expen);
+				//en= enr(enrol);
+				dro=dropp(drop);
+				
+
+
+//window.alert(ot)
+//window.alert(pop)
+
+//window.alert("good")
+
+
+					
+if( datac== "Pakistan")
+{
+
+var pm=p;
+
+
+
+//box
+
+var r=g.append("g");
+r.append("rect")
+.attr("class","pj")  
+.attr("x", 7)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+.attr("stroke", "black")
+.style("fill", "ghostwhite")
+
+
+// for expenditure
+
+ 			r.append("rect")
+			 .attr("x" , 14)
+			 .attr("y" , 115-exp)
+			 .attr("height" , 1+2*exp)
+			 .attr("width" , 30)
+			 .style("fill" , "hotpink")
+			.attr("stroke-width", 0.5)
+                        .attr("stroke", "black");
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+r.append('path')
+        .attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "hotpink");
+
+
+r.append("text")
+.attr("x" , 18)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start")
+.on("mouseover",function(d,a){
+
+
+d3.selectAll(this)
+
+
+r.append("text")
+
+.attr("x" , 18)
+.attr("y", 105)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm].expenditure; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+
+r.append("rect")
+			
+			.attr("x", 52)
+			.attr("y", 90)		
+			.attr("width", 49.5)
+			.attr("height", 50)
+			.style("fill" , "beige")
+			.attr("stroke-width", 1)
+                        .attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			r.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+r.append("text")
+.attr("x" , 53)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start")
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 55)
+.attr("y", 110)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm].popu; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//window.alert(en)
+
+
+var dis = [90, 90+en]
+//window.alert(dis[0])
+//window.alert(dis[1])
+
+
+// primary completion
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+//window.alert(prim)
+//window.alert(pri)
+
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+//window.alert(len)
+
+
+
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+
+
+
+// upward direction 
+
+
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen")
+
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 115)
+.attr("y", (len+90)/2+3)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm].primary; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+// for arrow
+
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+r.append('path')
+        .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange")
+
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 115)
+.attr("y", (len+dis)/2+3)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm].drop; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+
+// for arrow
+
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+r.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+//window.alert(ot)
+
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson")
+
+.on("mouseover",function(d,a){
+
+d3.select(this)
+
+r.append("text")
+
+.attr("x" , 115)
+.attr("y", (140+dis)/2+3)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm].unenroll; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+r.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+
+
+
+r.attr("transform",  " translate("+rec4+")")
+.attr("class", "i5");
+
+
+r.append("text")
+.attr("x", 20)
+.attr("y", 70)
+.attr("font-size","10pt")
+.attr("font-weight" , "BOLD")
+.text("Pakistan");
+
+} // end of if for pakistan
+
+
+
+
+
+if( datac== "Nepal")
+{
+
+var pm1=p;
+
+
+//box
+
+var r=g.append("g");
+r.append("rect")
+.attr("class","pj")  
+.attr("x", 7)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+.attr("stroke", "black")
+.style("fill", "ghostwhite")
+
+
+// for expenditure
+
+ 			r.append("rect")
+			 .attr("x" , 14)
+			 .attr("y" , 115-exp)
+			 .attr("height" , 1+2*exp)
+			 .attr("width" , 30)
+			 .style("fill" , "hotpink")
+			.attr("stroke-width", 0.5)
+                        .attr("stroke", "black");
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+r.append('path')
+        .attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "hotpink");
+
+
+r.append("text")
+.attr("x" , 18)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start")
+.on("mouseover",function(d,a){
+
+
+d3.selectAll(this)
+
+
+r.append("text")
+
+.attr("x" , 358)
+.attr("y", 75)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm1].expenditure; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+
+r.append("rect")
+			
+			.attr("x", 52)
+			.attr("y", 90)		
+			.attr("width", 49.5)
+			.attr("height", 50)
+			.style("fill" , "beige")
+			.attr("stroke-width", 1)
+                        .attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			r.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+r.append("text")
+.attr("x" , 53)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start")
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 395)
+.attr("y", 80)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm1].popu; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//window.alert(en)
+
+
+//var dis = [90, 90+en]
+//window.alert(dis[0])
+//window.alert(dis[1])
+
+
+// primary completion
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+//window.alert(prim)
+//window.alert(pri)
+
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+//window.alert(len)
+
+
+
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+var pn=pri;
+
+
+// upward direction 
+
+
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen")
+
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 455)
+.attr("y", 60+3+(pn)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm1].primary; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+// for arrow
+
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+r.append('path')
+        .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+var dn=dro;
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange")
+
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 455)
+.attr("y", 60+3+pn+(dn)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm1].drop; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+
+// for arrow
+
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+r.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+//window.alert(ot)
+
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+var on=ot;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson")
+
+.on("mouseover",function(d,a){
+
+d3.select(this)
+
+r.append("text")
+
+.attr("x" , 455)
+.attr("y", 60+3+pn+dn+(on)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm1].unenroll; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+r.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+
+
+
+r.attr("transform",  " translate("+rec3+") ")
+.attr("class", "i4");
+r.append("text")
+.attr("x", 20)
+.attr("y", 70)
+
+.attr("font-size","10pt")
+.attr("font-weight" , "BOLD")
+.text("Nepal");
+
+} // end of if for nepal
+
+
+
+
+if( datac== "India")
+{
+
+var pm2=p;
+
+
+//box
+
+var r=g.append("g");
+r.append("rect")
+.attr("class","pj")  
+.attr("x", 7)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+.attr("stroke", "black")
+.style("fill", "ghostwhite")
+
+//window.alert("eve"+pj)
+
+// for expenditure
+r.append("rect")
+			 .attr("x" , 14)
+			 .attr("y" , 115-exp)
+			 .attr("height" , 1+2*exp)
+			 .attr("width" , 30)
+			 .style("fill" , "hotpink")
+			.attr("stroke-width", 0.5)
+                        .attr("stroke", "black");
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+r.append('path')
+        .attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "hotpink");
+
+r.append("text")
+.attr("x" , 18)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start")
+.on("mouseover",function(d,a){
+
+
+d3.selectAll(this)
+
+
+r.append("text")
+
+.attr("x" , 48)
+.attr("y", 345)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm2].expenditure; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+r.append("rect")
+			.attr("x", 52)
+			.attr("y", 90)		
+			.attr("width", 49.5)
+			.attr("height", 50)
+			.style("fill" , "beige")
+			.attr("stroke-width", 1)
+                        .attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			r.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+r.append("text")
+.attr("x" , 53)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start")
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 85)
+.attr("y", 350)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm2].popu; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//window.alert(en)
+
+
+
+//var dis = [90, 90+en]
+//window.alert(dis[0])
+//window.alert(dis[1])
+
+
+// primary completion
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+
+
+
+//var pri = primary(prim);
+//window.alert(prim)
+//window.alert(pri)
+
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+//window.alert(len)
+
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+var pi=pri;
+
+
+// upward direction 
+
+
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+         .attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen")
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 145)
+.attr("y", 330+4+(pi)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm2].primary; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+// for arrow
+
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+r.append('path')
+        .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+var di=dro;
+
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange")
+
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 145)
+.attr("y", 330+pi+3+(di)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm2].drop; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+// for arrow
+
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+
+r.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+var oi=ot;
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson")
+
+.on("mouseover",function(d,a){
+
+d3.select(this)
+
+r.append("text")
+
+.attr("x" , 145)
+.attr("y", 330+3+pi+di+(oi)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm2].unenroll; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+r.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+
+
+r.attr("transform",  " translate("+rec2+")");
+r.attr("class", "i3");
+r.append("text")
+.attr("x", 20)
+.attr("y", 70)
+.attr("font-size","10pt")
+.attr("font-weight" , "BOLD")
+.text("India");
+
+} // end of if for india
+
+
+
+if( datac== "Bhutan")
+{
+
+var pm3=p;
+
+
+//box
+
+var r=g.append("g");
+r.append("rect")
+.attr("class","pj")  
+.attr("x", 7)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+.attr("stroke", "black")
+.style("fill", "ghostwhite")
+
+//window.alert("eve"+pj)
+
+// for expenditure
+
+		r.append("rect")
+			 .attr("x" , 14)
+			 .attr("y" , 115-exp)
+			 .attr("height" , 1+2*exp)
+			 .attr("width" , 30)
+			 .style("fill" , "hotpink")
+			.attr("stroke-width", 0.5)
+                        .attr("stroke", "black");
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+r.append('path')
+        .attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "hotpink");
+
+
+r.append("text")
+.attr("x" , 18)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start")
+.on("mouseover",function(d,a){
+
+
+d3.selectAll(this)
+
+
+r.append("text")
+
+.attr("x" , 548)
+.attr("y", 215)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm3].expenditure; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+r.append("rect")
+			
+			.attr("x", 52)
+			.attr("y", 90)		
+			.attr("width", 49.5)
+			.attr("height", 50)
+			.style("fill" , "beige")
+			.attr("stroke-width", 1)
+                        .attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			r.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+r.append("text")
+.attr("x" , 53)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start")
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 585)
+.attr("y", 220)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm3].popu; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//window.alert(en)
+
+
+
+//var dis = [90, 90+en]
+//window.alert(dis[0])
+//window.alert(dis[1])
+
+
+// primary completion
+ 
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+
+
+
+//var pri = primary(prim);
+//window.alert(prim)
+//window.alert(pri)
+
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+//window.alert(len)
+
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+var pb=pri;
+
+
+// upward direction 
+
+
+//var lenb= len;
+//var lenb1= len1;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen")
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 645)
+.attr("y", 200+3+(pb)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm3].primary; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+// for arrow
+
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+r.append('path')
+         .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+var db=dro;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+       .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange")
+
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 645)
+.attr("y", 200+pb+3+(db)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm3].drop; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+// for arrow
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+r.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+var ob=ot;
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson")
+
+.on("mouseover",function(d,a){
+
+d3.select(this)
+
+r.append("text")
+
+.attr("x" , 645)
+.attr("y", 200+3+pb+db+(ob)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm3].unenroll; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+r.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+
+r.attr("transform",  " translate("+rec1+")");
+r.attr("class", "i2");
+
+r.append("text")
+.attr("x", 20)
+.attr("y", 70)
+.attr("font-size","10pt")
+.attr("font-weight" , "BOLD")
+.text("Bhutan");
+
+} // end of if for bhutan
+
+
+if( datac== "Bangladesh")
+{
+
+var pm4=p;
+
+
+//box
+
+var r=g.append("g");
+r.append("rect")
+.attr("class","pj")  
+.attr("x", 7)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+.attr("stroke", "black")
+.style("fill", "ghostwhite")
+
+//window.alert("eve"+pj)
+
+// for expenditure
+
+		r.append("rect")
+			 .attr("x" , 14)
+			 .attr("y" , 115-exp)
+			 .attr("height" , 1+2*exp)
+			 .attr("width" , 30)
+			 .style("fill" , "hotpink")
+			.attr("stroke-width", 0.5)
+                        .attr("stroke", "black");
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+r.append('path')
+        .attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "hotpink");
+
+
+r.append("text")
+.attr("x" , 18)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start")
+.on("mouseover",function(d,a){
+
+
+d3.selectAll(this)
+
+
+r.append("text")
+
+.attr("x" , 418)
+.attr("y", 365)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm4].expenditure; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+r.append("rect")
+			.attr("x", 52)
+			.attr("y", 90)		
+			.attr("width", 49.5)
+			.attr("height", 50)
+			.style("fill" , "beige")
+			.attr("stroke-width", 1)
+                        .attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			r.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+r.append("text")
+.attr("x" , 53)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start")
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 455)
+.attr("y", 370)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm4].popu; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//window.alert(en)
+
+
+
+//var dis = [90, 90+en]
+//window.alert(dis[0])
+//window.alert(dis[1])
+
+
+// primary completion
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+
+
+
+//var pri = primary(prim);
+//window.alert(prim)
+//window.alert(pri)
+
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+//window.alert(len)
+
+
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+var pbn=pri;
+
+
+// upward direction 
+
+
+//var lenbn= len;
+//var lenbn1= len1;
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+          .attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen")
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 515)
+.attr("y", 350+3+(pbn)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm4].primary; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+// for arrow
+
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+r.append('path')
+         .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+var dbn=dro;
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange")
+
+.on("mouseover",function(d,a){
+
+
+d3.select(this)
+
+r.append("text")
+.attr("x" , 515)
+.attr("y", 350+pbn+3+(dbn)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm4].drop; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+
+// for arrow
+
+
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+r.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+var obn=ot;
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+r.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson")
+
+.on("mouseover",function(d,a){
+
+d3.select(this)
+
+r.append("text")
+
+.attr("x" , 515)
+.attr("y", 350+3+pbn+dbn+(obn)/2)
+
+.attr('font-size','8pt')
+.attr("class", "expen"+a)
+
+.text(function(d){ return data[pm4].unenroll; });
+
+})
+.on("mouseout", function(d,a){
+
+d3.select(".expen"+a)
+.remove();
+
+});
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+r.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+r.attr("transform",  " translate("+rec+")");
+r.attr("class", "i1");
+
+r.append("text")
+.attr("x", 20)
+.attr("y", 70)
+.attr("font-size","10pt")
+.attr("font-weight" , "BOLD")
+.text("Bangladesh");
+
+} // end of if for bangladesh
+
+
+
+
+}
+
+else {continue}
+
+
+} // end of if
+
+
+else { continue }
+
+
+break;
+}
+
+
+		} // end of for loop
+
+
+
+
+
+});// end of csv file
+
+}); // end of json file
+
+
+} // end of visual
+
+
+
+</script>

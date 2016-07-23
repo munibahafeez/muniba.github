@@ -1,0 +1,3120 @@
+<html>
+<head>
+<style>
+
+#header {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+   padding:5px;
+height : 20px;
+width: 1170;	 	 
+}
+</style>
+</head>
+
+
+<div id="header"></div>
+<div style="width: 1180px; height: 70px; overflow: hidden; display: inline-block; background-color:#eeeeee;">
+<table width="600">
+
+<td width="30%">Comparison of 2 Countries</td>	
+<tr>
+<td width="30%"> Start Animation</td>
+</tr>
+<div>
+      <button id="start">start</button>
+
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr>
+<td> Make Text Enable </td>
+</tr>
+
+</div>
+</table>
+
+<div id="checkbox">
+ 
+</div>
+
+</html>
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+
+<script src="../d3.min.js"></script>
+
+<style type="text/css">
+
+body { 
+font: 12px Arial;	
+     }
+
+#start, #clock {
+      	position: absolute;
+      	top: 65px;
+      }
+      #start {
+      	left: 140px;
+      }
+      #clock {
+      	left: 65px;
+}
+
+
+#checkbox {
+position: absolute;
+      	top: 90px;
+left: 140px;
+}
+		
+</style>
+
+<body>
+
+
+
+
+<script type= "text/javascript">
+
+	var yearvalue;
+
+
+var chk=0;
+
+d3.select("#checkbox")
+.append('input')
+.attr('type','checkbox')
+.on("click",function() { if (this.checked){ chk=1;}
+else chk=0;});
+
+
+
+
+var playing = false;
+
+
+	var width = 1180,
+      	    height = 550;
+
+		var svg = d3.select("body").append("svg")
+      			.attr("width", width)
+      			.attr("height", height)
+			.style("background-color" , "lightgray");
+
+
+		var projection = d3.geo.mercator()
+     	 		.center([115, 23 ])
+     	 		.scale(500)
+       	 		.rotate([0,0]);
+
+		var path = d3.geo.path()
+      			.projection(projection);
+
+
+		var g = svg.append("g");
+		var r= g.append("g");
+
+var rrr= g.append("g");
+
+var expp=d3.scale.linear().range([0,25]).domain([0,10]);
+
+
+var dropp=d3.scale.linear().range([0,20]).domain([0,100]);
+
+
+var zoomListener = d3.behavior.zoom()
+  			.scaleExtent([0.5, 4])
+  			.on("zoom", function(){
+ 			g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+			//g.attr("fill-opacity" , 0.7);		
+});
+
+r.selectAll("rect").remove();
+g.selectAll("path").remove();
+
+
+
+
+	
+
+d3.selectAll("text").remove();
+
+
+	
+zoomListener(g);
+
+
+
+
+
+
+
+
+
+var stop=0;
+
+
+
+var rec3=[622,60];
+var rec4=[590,60];
+
+var pwidth;
+var select = 0;
+var array;
+var jsonc;
+var jsonc1;	
+var exp;
+var enrol;
+var prim;
+var pop;
+var popu;
+var drop;
+var ex;
+var en;
+var dro;
+var out;
+var ot;
+var sum;
+var population;
+
+var x1=100;
+var y1=100;
+
+var store=0;
+var expi=[];
+var popi=[];
+var enroli=[];
+var primi=[];
+var dropi=[];
+var outi= [];
+
+
+
+
+
+	d3.json("asia1.json", function(json){
+
+
+		d3.csv("eduseries.csv", function(data){  
+
+
+	// for population max and min value
+ 
+ 		data.forEach(function(d) {
+    		d.popu = +d.popu;
+ 		});
+
+
+		data.forEach(function(d) {
+    		d.enroll = +d.enroll;
+ 		});
+
+
+		data.forEach(function(d) {
+    		d.outof = +d.outof;
+ 		});
+
+var outof=d3.scale.linear().range([1,25]).domain([d3.min(data, function(d) { return d.outof; }), d3.max(data, function(d) { return d.outof; })]);
+
+var enrmax = d3.max(data, function(d) { return d.enroll; });
+
+
+
+
+// side symbols
+
+
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "yellowgreen")
+ 		.style("fill", "yellowgreen")
+		.attr("points" , "870,30,  870,60, 880,45")
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 50)
+.text("Primary Completion Rate")
+.attr('font-size','10pt');
+
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "darkorange")
+ 		.style("fill", "darkorange")
+		.attr("points" , "870,70,  870,100, 880,85")
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 90)
+.text("Drop Out Rate")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "crimson")
+ 		.style("fill", "crimson")
+		.attr("points" , "870,110,  870,140, 880,125");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 130)
+.text("Out of School Children")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "hotpink")
+ 		.style("fill", "hotpink")
+		.attr("points" , "870,150,  870,180, 880,165");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 170)
+.text("Govt. Expenditure as % of GDP")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "blue")
+ 		.style("fill", "blue")
+		.attr("points" , "870,190,  870,220, 880,205");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 210)
+.text("Total Population of 0-14 age")
+.attr('font-size','10pt');
+
+
+
+g.append("rect")  
+.attr("x", 380)
+.attr("y", 100)
+.attr("width", 450)
+.attr("height", 200)
+.attr("stroke", "skyblue")
+.style("fill", "white");
+
+
+
+
+for (var hline =0; hline<50; hline++)
+{
+
+
+g.append("line")
+.attr("x1" ,381 +10*hline)
+.attr("y1" ,101)
+.attr("x2" , 381+10*hline)
+.attr("y2" ,301)
+.attr("stroke" , "Lightgray")
+.attr("stroke-width" , 1);
+
+
+}
+for (var vline = 0; vline<20; vline++)
+{
+g.append("line")
+.attr("x1" ,381)
+.attr("y1" ,101+10*vline)
+.attr("x2" , 831)
+.attr("y2" ,101+10*vline)
+.attr("stroke" , "Lightgray")
+.attr("stroke-width" , 1);
+}
+
+                    g.selectAll("path")
+                   	.data(json.features)
+                   	.enter()
+                   	.append("path")
+                   	.attr("d", path)
+			.attr("stroke" , "royalblue")
+			.attr("stroke-width", 1)
+                        .style("fill", "white")
+
+
+
+
+			
+
+.on("click", function(d,i)
+{
+
+	d3.select(this)
+	.attr("class",  "i" );
+	d3.selectAll(i);
+
+
+
+		if(select == 0)
+			{
+			jsonc=json.features[i].properties.name;
+
+
+
+
+svg.append("text")
+.attr("x" , 700)
+.attr("y", 90)
+.attr("stroke", "black")
+.attr("font-size","10pt")
+.text(jsonc);
+
+			}
+
+		if(select == 1)
+			{
+			jsonc1=json.features[i].properties.name;
+
+
+
+svg.append("text")
+.attr("x" , 450)
+.attr("y", 90)
+.attr("stroke", "black")
+.attr("font-size","10pt")
+.text(jsonc1);
+
+			}
+
+
+
+
+
+
+
+var store=0;
+		for(var p=0; p<data.length; p++)
+			
+			{
+
+			var datac= data[p].country;
+			
+			if(jsonc == datac) 
+			    {
+
+				if(data[p].year == 1971)
+				   {
+				expen=data[p].expenditure;
+				expi[i]=expen;
+				popu= data[p].popu;
+				population = data[p].population;
+
+popi[i]=popu;
+				prim= data[p].primary;
+primi[i]=prim;
+				enrol= data[p].enroll;
+
+enroli[i]=enrol;
+				drop= data[p].drop;
+dropi[i]=drop;
+				out = data[p].unenroll;
+outi[i]=out;
+
+				sum= data[p].ensumun;
+				exp= expp(expen);
+				dro=dropp(drop);
+				
+
+				   } // end of if
+
+
+				else { continue }
+
+
+if(select == 0)
+{
+
+var pm=p;
+
+//box
+
+var rrr=g.append("g");
+var rt=g.append("g");
+
+var rr=g.append("g");
+ 
+rrr.append("rect")
+.attr("x", 13)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+
+.style("fill", "none") 
+.attr("stroke", "none")
+.attr("stroke-width" , 0.5);
+
+
+
+// for expenditure
+
+rrr.append("rect")
+
+.attr("x" , 14)
+.attr("y" , 115-exp)
+.attr("height" , 1+2*exp)
+.attr("width" , 28)
+.style("fill" , "hotpink")
+.attr("stroke-width", 0.4)
+.attr("stroke", "black");
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+ rrr.append('path')
+.attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "hotpink");
+
+
+rrr.append("text")
+.attr("x" , 18)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+if(chk==1) {
+
+rrr.append("text")
+
+.attr("x" , 18)
+.attr("y", 105)
+.attr("id", "blueLine")
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].expenditure + "%"; });
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+rrr.append("rect")
+.attr("x", 52)
+.attr("y", 90)
+		
+.attr("width", 50)
+.attr("height", 50)
+.style("fill" , "beige")
+
+.attr("stroke-width", 1)
+.attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			rrr.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+
+rrr.append("text")
+.attr("x" , 53)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+
+
+if(chk==1) {
+rrr.append("text")
+.attr("x" , 55)
+.attr("y", 130)
+.attr("id", "blueLine1")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+
+.text(function(d){ return data[pm].popu + "%"; });
+
+}
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//var dis = [90, 90+en]
+
+
+// primary completion
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+//var pri = primary(prim);
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+
+
+// upward direction 
+
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+rrr.append('path')
+ .attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "yellowgreen");
+
+
+if (chk==1) {
+
+rrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+90)/2+3)
+.attr("id", "blueLine2")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].primary + "%"; });
+}
+
+// for arrow
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+	rrr.append('path')
+          .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+        .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+if (chk==1)
+{
+rrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+dis)/2+3)
+.attr("id", "blueLine3")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].drop + "%"; });
+
+}
+
+// for arrow
+
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+if(chk==1)
+{
+rrr.append("text")
+
+.attr("x" , 115)
+.attr("y", (140+dis)/2+3)
+.attr("id", "blueLine4")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].unenroll + "%"; });
+
+}
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+var rt=rrr.attr("transform",  " translate("+rec4+") scale(1.2) ");
+
+
+
+
+
+
+
+
+
+
+
+ }// end of if for select 0
+
+	} // end of 2nd if
+
+		else { continue }
+
+
+		} // end of for loop
+
+
+
+
+for(var p=0; p<data.length; p++)
+			
+			{
+
+			var datac= data[p].country;
+			
+			if(jsonc1 == datac) 
+			    {
+
+				if(data[p].year == 1971)
+				   {
+				expen=data[p].expenditure;
+				expi[i]=expen;
+				popu= data[p].popu;
+				population = data[p].population;
+
+popi[i]=popu;
+				prim= data[p].primary;
+primi[i]=prim;
+				enrol= data[p].enroll;
+
+enroli[i]=enrol;
+				drop= data[p].drop;
+dropi[i]=drop;
+				out = data[p].unenroll;
+outi[i]=out;
+
+				sum= data[p].ensumun;
+				exp= expp(expen);
+				dro=dropp(drop);
+				
+
+				   } // end of if
+
+
+				else { continue }
+
+
+if(select == 1)
+{
+
+var pm1=p;
+
+//box
+
+var rrr=g.append("g");
+var rr=g.append("g");
+var rrrr=g.append("g");
+ 
+rrr.append("rect")
+.attr("x", 13)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+
+.style("fill", "none") 
+.attr("stroke", "none")
+.attr("stroke-width" , 0.5);
+
+
+
+// for expenditure
+
+rrr.append("rect")
+
+.attr("x" , 14)
+.attr("y" , 115-exp)
+.attr("height" , 1+2*exp)
+.attr("width" , 28)
+.style("fill" , "hotpink")
+.attr("stroke-width", 0.4)
+.attr("stroke", "black");
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+ rrr.append('path')
+.attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "hotpink");
+
+rr.append("text")
+.attr("x" , -35)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+
+if (chk==1) {
+rr.append("text")
+
+.attr("x" , -35)
+.attr("y", 105)
+.attr("id", "blueLine5")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].expenditure + "%"; });
+
+}
+
+
+
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+rrr.append("rect")
+.attr("x", 52)
+.attr("y", 90)
+		
+.attr("width", 50)
+.attr("height", 50)
+.style("fill" , "beige")
+
+.attr("stroke-width", 1)
+.attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			rrr.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+
+rr.append("text")
+.attr("x" , -102)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+if (chk==1) {
+rr.append("text")
+.attr("x" , -72)
+.attr("y", 130)
+.attr("id", "blueLine6")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].popu + "%"; });
+
+}
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//var dis = [90, 90+en]
+
+
+// primary completion
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+//var pri = primary(prim);
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+
+
+// upward direction 
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+rrr.append('path')
+.attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "yellowgreen");
+
+if(chk==1) {
+
+rrrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+90)/2+3)
+.attr("id", "blueLine7")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].primary + "%"; });
+}
+
+
+// for arrow
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+       .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+if (chk==1) {
+
+rrrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+dis)/2+3)
+.attr("id", "blueLine8")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].drop + "%"; });
+
+}
+
+// for arrow
+
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+if (chk==1) {
+rrrr.append("text")
+
+.attr("x" , 115)
+.attr("y", (140+dis)/2+3)
+.attr("id", "blueLine9")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].unenroll + "%"; });
+
+}
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+var rt=rrr.attr("transform",  " translate("+rec3+") scale(-1.2,1.2) ");
+
+
+rr.attr("transform",  " translate("+rec3+") scale(1.2,1.2)");
+
+
+rrrr.attr("transform",  " translate(335,60) scale(1.2,1.2)");
+
+
+
+
+
+
+
+
+
+
+ }// end of if for select 0
+
+	} // end of 2nd if
+
+		else { continue }
+
+
+		} // end of for loop
+
+
+
+select++;
+
+}); // end of click
+
+g.selectAll("text")
+
+               		.data(json.features)
+                	.enter()
+                	.append("text")
+			.attr("transform",function(d){                 
+   				var tex = projection(d3.geo.centroid(d));
+    				return "translate("+tex+")"; })
+			.text(function(d,i){return d.properties.name;})
+			.attr("font-size","8pt")
+			.attr("font-weight" , "BOLD")
+			.style("fill", "black");
+
+
+});// end of csv file
+
+}); // end of json file
+
+animateMap();
+
+//==========================================================
+
+
+function animateMap() {
+
+var yr =[];
+for(var year = 1971; year<2016; year++)
+{
+yr.push(year);
+}
+
+var yr_idx=-1;
+
+
+
+
+  var timer;  // create timer object
+  d3.select('#start')  
+    .on('click', function() {  // when user clicks the play button
+      if(playing == false) {  // if the map is currently playing
+        timer = setInterval(function(){   // set a JS interval
+          if(yr_idx < yr.length-1) {  
+              yr_idx +=1;  // increment the current attribute counter
+          } else {
+            yr_idx = 0;  // or reset it to zero
+          }
+
+
+
+if (chk==0)
+{
+         visualize(yr[yr_idx]);  // update the representation of the map 
+
+}
+
+if (chk == 1)
+{
+
+check(yr[yr_idx]);
+
+}
+          d3.select('#clock').html(yr[yr_idx]);  // update the clock
+        }, 700);
+      
+        d3.select(this).html('stop');  // change the button label to stop
+        playing = true;   // change the status of the animation
+      } else {    // else if is currently playing
+        clearInterval(timer);   // stop the animation by clearing the interval
+        d3.select(this).html('start');   // change the button label to play
+        playing = false;   // change the status again
+      }
+  });
+}
+
+
+
+
+
+
+function check(yr)
+{
+
+
+d3.json("asia1.json", function(json){
+
+
+	d3.csv("eduseries.csv", function(data){ 
+	
+
+d3.selectAll("text").remove();
+
+svg.append("text")
+.attr("x", 540)
+.attr("y", 50)
+.attr("stroke","black")
+.attr("font-size" , "12pt")
+.text("Year :   " + yr);
+
+
+svg.append("text")
+.attr("x" , 700)
+.attr("y", 90)
+.attr("stroke", "black")
+.attr("font-size","10pt")
+.text(jsonc);
+
+svg.append("text")
+.attr("x" , 450)
+.attr("y", 90)
+.attr("stroke", "black")
+.attr("font-size","10pt")
+.text(jsonc1);
+
+
+
+
+
+
+
+
+
+
+
+
+// side symbols
+
+
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "yellowgreen")
+ 		.style("fill", "yellowgreen")
+		.attr("points" , "870,30,  870,60, 880,45")
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 50)
+.text("Primary Completion Rate")
+.attr('font-size','10pt');
+
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "darkorange")
+ 		.style("fill", "darkorange")
+		.attr("points" , "870,70,  870,100, 880,85")
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 90)
+.text("Drop Out Rate")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "crimson")
+ 		.style("fill", "crimson")
+		.attr("points" , "870,110,  870,140, 880,125");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 130)
+.text("Out of School Children")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "hotpink")
+ 		.style("fill", "hotpink")
+		.attr("points" , "870,150,  870,180, 880,165");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 170)
+.text("Govt. Expenditure as % of GDP")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "blue")
+ 		.style("fill", "blue")
+		.attr("points" , "870,190,  870,220, 880,205");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 210)
+.text("Total Population of 0-14 age")
+.attr('font-size','10pt');
+
+
+
+g.append("rect")  
+.attr("x", 380)
+.attr("y", 100)
+.attr("width", 450)
+.attr("height", 200)
+.attr("stroke", "skyblue")
+.style("fill", "white");
+
+
+
+
+for (var hline =0; hline<50; hline++)
+{
+
+
+g.append("line")
+.attr("x1" ,381 +10*hline)
+.attr("y1" ,101)
+.attr("x2" , 381+10*hline)
+.attr("y2" ,301)
+.attr("stroke" , "Lightgray")
+.attr("stroke-width" , 1);
+
+
+}
+for (var vline = 0; vline<20; vline++)
+{
+g.append("line")
+.attr("x1" ,381)
+.attr("y1" ,101+10*vline)
+.attr("x2" , 831)
+.attr("y2" ,101+10*vline)
+.attr("stroke" , "Lightgray")
+.attr("stroke-width" , 1);
+}
+
+                    g.selectAll("path")
+                   	.data(json.features)
+                   	.enter()
+                   	.append("path")
+                   	.attr("d", path)
+			.attr("stroke" , "royalblue")
+			.attr("stroke-width", 1)
+                        .style("fill", "white");
+
+
+
+
+			g.selectAll("text")
+
+               		.data(json.features)
+                	.enter()
+                	.append("text")
+			.attr("transform",function(d){                 
+   				var tex = projection(d3.geo.centroid(d));
+    				return "translate("+tex+")"; })
+			.text(function(d,i){return d.properties.name;})
+			.attr("font-size","8pt")
+			.attr("font-weight" , "BOLD")
+			.style("fill", "black");
+
+
+
+// for population max and min value
+
+ 
+	 data.forEach(function(d) {
+    	d.popu = +d.popu;
+ 	});
+
+
+	data.forEach(function(d) {
+    	d.enroll = +d.enroll;
+ 	});
+
+
+	data.forEach(function(d) {
+    	d.outof = +d.outof;
+ 	});
+
+var outof=d3.scale.linear().range([1,25]).domain([d3.min(data, function(d) { return d.outof; }), d3.max(data, function(d) { return d.outof; })]);
+
+var enrmax = d3.max(data, function(d) { return d.enroll; });
+
+
+                  
+
+
+
+for ( pj=0; pj< 2; pj++)
+	{
+
+	for(var p=0; p<data.length; p++)
+			
+			{
+
+			var datac= data[p].country;
+			//window.alert(datac)
+
+
+if ( pj == 0  && jsonc == datac)
+{
+		
+if(data[p].year == yr){
+
+expen=data[p].expenditure;
+
+expi[pj]=expen;
+
+				popu= data[p].popu;
+			
+				population = data[p].population;
+
+				prim= data[p].primary;
+
+				enrol= data[p].enroll;
+
+				drop= data[p].drop;
+
+				out = data[p].unenroll;
+
+				sum= data[p].ensumun;
+				exp= expp(expen);
+				//en= enr(enrol);
+				dro=dropp(drop);
+				
+
+
+
+
+
+
+
+var pm=p;
+
+//box
+
+var rrr=g.append("g");
+
+var rr=g.append("g");
+ 
+rrr.append("rect")
+.attr("x", 13)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+
+.style("fill", "none") 
+.attr("stroke", "none")
+.attr("stroke-width" , 0.5);
+
+
+
+// for expenditure
+
+rrr.append("rect")
+
+.attr("x" , 14)
+.attr("y" , 115-exp)
+.attr("height" , 1+2*exp)
+.attr("width" , 28)
+.style("fill" , "hotpink")
+.attr("stroke-width", 0.4)
+.attr("stroke", "black");
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+ rrr.append('path')
+.attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "hotpink");
+
+
+rrr.append("text")
+.attr("x" , 18)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+
+rrr.append("text")
+
+.attr("x" , 18)
+.attr("y", 105)
+.attr("id", "blueLine")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].expenditure + "%"; });
+
+
+
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+rrr.append("rect")
+.attr("x", 52)
+.attr("y", 90)
+		
+.attr("width", 50)
+.attr("height", 50)
+.style("fill" , "beige")
+
+.attr("stroke-width", 1)
+.attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			rrr.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+
+rrr.append("text")
+.attr("x" , 53)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+
+
+rrr.append("text")
+.attr("x" , 55)
+.attr("y", 130)
+.attr("id", "blueLine1")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].popu + "%"; });
+
+
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//var dis = [90, 90+en]
+
+
+// primary completion
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+//var pri = primary(prim);
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+
+
+// upward direction 
+
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+rrr.append('path')
+ .attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "yellowgreen");
+
+
+rrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+90)/2+3)
+.attr("id", "blueLine2")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].primary + "%"; });
+
+
+// for arrow
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+	rrr.append('path')
+          .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+        .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+rrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+dis)/2+3)
+.attr("id", "blueLine3")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].drop + "%"; });
+
+
+
+// for arrow
+
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+rrr.append("text")
+
+.attr("x" , 115)
+.attr("y", (140+dis)/2+3)
+.attr("id", "blueLine4")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].unenroll + "%"; });
+
+
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+var rt=rrr.attr("transform",  " translate("+rec4+") scale(1.2) ");
+
+
+
+
+
+
+
+	} // end of if 1
+
+	else {continue}
+
+
+		} // end of if
+
+
+		else { continue }
+
+
+
+	} // end of p loop
+
+
+
+
+
+for(var p=0; p<data.length; p++)
+			
+			{
+
+			var datac= data[p].country;
+
+if (pj == 1 && jsonc1 == datac  )
+{
+
+		
+if(data[p].year == yr){
+
+expen=data[p].expenditure;
+
+expi[pj]=expen;
+
+
+
+
+				popu= data[p].popu;
+
+				population = data[p].population;
+
+				prim= data[p].primary;
+
+				enrol= data[p].enroll;
+
+				drop= data[p].drop;
+
+				out = data[p].unenroll;
+
+
+				sum= data[p].ensumun;
+
+
+				exp= expp(expen);
+				//en= enr(enrol);
+				dro=dropp(drop);
+
+
+
+
+
+var pm1=p;
+
+//box
+
+var rrr=g.append("g");
+var rr=g.append("g");
+var rrrr=g.append("g");
+ 
+rrr.append("rect")
+.attr("x", 13)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+
+.style("fill", "none") 
+.attr("stroke", "none")
+.attr("stroke-width" , 0.5);
+
+
+
+// for expenditure
+
+rrr.append("rect")
+
+.attr("x" , 14)
+.attr("y" , 115-exp)
+.attr("height" , 1+2*exp)
+.attr("width" , 28)
+.style("fill" , "hotpink")
+.attr("stroke-width", 0.4)
+.attr("stroke", "black");
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+ rrr.append('path')
+.attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "hotpink");
+
+rr.append("text")
+.attr("x" , -35)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+
+rr.append("text")
+
+.attr("x" , -35)
+.attr("y", 105)
+.attr("id", "blueLine5")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].expenditure + "%"; });
+
+
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+rrr.append("rect")
+.attr("x", 52)
+.attr("y", 90)
+		
+.attr("width", 50)
+.attr("height", 50)
+.style("fill" , "beige")
+
+.attr("stroke-width", 1)
+.attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			rrr.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+
+rr.append("text")
+.attr("x" , -102)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+
+rr.append("text")
+.attr("x" , -72)
+.attr("y", 130)
+.attr("id", "blueLine6")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].popu + "%"; });
+
+
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//var dis = [90, 90+en]
+
+
+// primary completion
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+//var pri = primary(prim);
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+
+
+// upward direction 
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+rrr.append('path')
+.attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "yellowgreen");
+
+
+rrrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+90)/2+3)
+.attr("id", "blueLine7")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].primary + "%"; });
+
+
+// for arrow
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+       .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+rrrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+dis)/2+3)
+.attr("id", "blueLine8")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].drop + "%"; });
+
+
+// for arrow
+
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+rrrr.append("text")
+
+.attr("x" , 115)
+.attr("y", (140+dis)/2+3)
+.attr("id", "blueLine9")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].unenroll + "%"; });
+
+
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+var rt=rrr.attr("transform",  " translate("+rec3+") scale(-1.2,1.2) ");
+
+
+rr.attr("transform",  " translate("+rec3+") scale(1.2,1.2)");
+
+
+rrrr.attr("transform",  " translate(335,60) scale(1.2,1.2)");
+
+
+
+
+}
+
+else {continue}
+
+
+} // end of if
+
+
+else { continue }
+
+} // eng of p loop
+
+
+		} // end of pj for loop
+
+
+
+
+});// end of csv file
+
+}); // end of json file
+
+
+
+}// end of check
+
+
+
+
+
+
+
+function visualize(yr)
+
+{
+
+
+
+
+d3.json("asia1.json", function(json){
+
+
+	d3.csv("eduseries.csv", function(data){ 
+	
+
+d3.selectAll("text").remove();
+
+svg.append("text")
+.attr("x", 540)
+.attr("y", 50)
+.attr("stroke","black")
+.attr("font-size" , "12pt")
+.text("Year :   " + yr);
+
+
+svg.append("text")
+.attr("x" , 700)
+.attr("y", 90)
+.attr("stroke", "black")
+.attr("font-size","10pt")
+.text(jsonc);
+
+svg.append("text")
+.attr("x" , 450)
+.attr("y", 90)
+.attr("stroke", "black")
+.attr("font-size","10pt")
+.text(jsonc1);
+
+
+
+
+
+
+
+
+
+
+
+
+// side symbols
+
+
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "yellowgreen")
+ 		.style("fill", "yellowgreen")
+		.attr("points" , "870,30,  870,60, 880,45")
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 50)
+.text("Primary Completion Rate")
+.attr('font-size','10pt');
+
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "darkorange")
+ 		.style("fill", "darkorange")
+		.attr("points" , "870,70,  870,100, 880,85")
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 90)
+.text("Drop Out Rate")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "crimson")
+ 		.style("fill", "crimson")
+		.attr("points" , "870,110,  870,140, 880,125");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 130)
+.text("Out of School Children")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "hotpink")
+ 		.style("fill", "hotpink")
+		.attr("points" , "870,150,  870,180, 880,165");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 170)
+.text("Govt. Expenditure as % of GDP")
+.attr('font-size','10pt');
+
+svg.append("polygon")
+		.attr("stroke-width", 1)
+		.attr("stroke", "blue")
+ 		.style("fill", "blue")
+		.attr("points" , "870,190,  870,220, 880,205");
+
+svg.append("text")
+.attr("x" , 882)
+.attr("y", 210)
+.text("Total Population of 0-14 age")
+.attr('font-size','10pt');
+
+
+
+g.append("rect")  
+.attr("x", 380)
+.attr("y", 100)
+.attr("width", 450)
+.attr("height", 200)
+.attr("stroke", "skyblue")
+.style("fill", "white");
+
+
+
+
+for (var hline =0; hline<50; hline++)
+{
+
+
+g.append("line")
+.attr("x1" ,381 +10*hline)
+.attr("y1" ,101)
+.attr("x2" , 381+10*hline)
+.attr("y2" ,301)
+.attr("stroke" , "Lightgray")
+.attr("stroke-width" , 1);
+
+
+}
+for (var vline = 0; vline<20; vline++)
+{
+g.append("line")
+.attr("x1" ,381)
+.attr("y1" ,101+10*vline)
+.attr("x2" , 831)
+.attr("y2" ,101+10*vline)
+.attr("stroke" , "Lightgray")
+.attr("stroke-width" , 1);
+}
+
+                    g.selectAll("path")
+                   	.data(json.features)
+                   	.enter()
+                   	.append("path")
+                   	.attr("d", path)
+			.attr("stroke" , "royalblue")
+			.attr("stroke-width", 1)
+                        .style("fill", "white");
+
+
+
+
+			g.selectAll("text")
+
+               		.data(json.features)
+                	.enter()
+                	.append("text")
+			.attr("transform",function(d){                 
+   				var tex = projection(d3.geo.centroid(d));
+    				return "translate("+tex+")"; })
+			.text(function(d,i){return d.properties.name;})
+			.attr("font-size","8pt")
+			.attr("font-weight" , "BOLD")
+			.style("fill", "black");
+
+
+
+// for population max and min value
+
+ 
+	 data.forEach(function(d) {
+    	d.popu = +d.popu;
+ 	});
+
+
+	data.forEach(function(d) {
+    	d.enroll = +d.enroll;
+ 	});
+
+
+	data.forEach(function(d) {
+    	d.outof = +d.outof;
+ 	});
+
+var outof=d3.scale.linear().range([1,25]).domain([d3.min(data, function(d) { return d.outof; }), d3.max(data, function(d) { return d.outof; })]);
+
+var enrmax = d3.max(data, function(d) { return d.enroll; });
+
+
+                  
+
+
+
+for ( pj=0; pj< 2; pj++)
+	{
+
+	for(var p=0; p<data.length; p++)
+			
+			{
+
+			var datac= data[p].country;
+			//window.alert(datac)
+
+
+if ( pj == 0  && jsonc == datac)
+{
+		
+if(data[p].year == yr){
+
+expen=data[p].expenditure;
+
+expi[pj]=expen;
+
+				popu= data[p].popu;
+			
+				population = data[p].population;
+
+				prim= data[p].primary;
+
+				enrol= data[p].enroll;
+
+				drop= data[p].drop;
+
+				out = data[p].unenroll;
+
+				sum= data[p].ensumun;
+				exp= expp(expen);
+				//en= enr(enrol);
+				dro=dropp(drop);
+				
+
+
+
+
+
+
+
+var pm=p;
+
+//box
+
+var rrr=g.append("g");
+
+var rr=g.append("g");
+ 
+rrr.append("rect")
+.attr("x", 13)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+
+.style("fill", "none") 
+.attr("stroke", "none")
+.attr("stroke-width" , 0.5);
+
+
+
+// for expenditure
+
+rrr.append("rect")
+
+.attr("x" , 14)
+.attr("y" , 115-exp)
+.attr("height" , 1+2*exp)
+.attr("width" , 28)
+.style("fill" , "hotpink")
+.attr("stroke-width", 0.4)
+.attr("stroke", "black");
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+ rrr.append('path')
+.attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "hotpink");
+
+
+rrr.append("text")
+.attr("x" , 18)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+/*
+rrr.append("text")
+
+.attr("x" , 18)
+.attr("y", 105)
+.attr("id", "blueLine")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].expenditure; });
+
+*/
+
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+rrr.append("rect")
+.attr("x", 52)
+.attr("y", 90)
+		
+.attr("width", 50)
+.attr("height", 50)
+.style("fill" , "beige")
+
+.attr("stroke-width", 1)
+.attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			rrr.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+
+rrr.append("text")
+.attr("x" , 53)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+
+/*
+rrr.append("text")
+.attr("x" , 55)
+.attr("y", 110)
+.attr("id", "blueLine1")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].popu; });
+
+*/
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//var dis = [90, 90+en]
+
+
+// primary completion
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+//var pri = primary(prim);
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+
+
+// upward direction 
+
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+rrr.append('path')
+ .attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "yellowgreen");
+
+/*
+rrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+90)/2+3)
+.attr("id", "blueLine2")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].primary; });
+*/
+
+// for arrow
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+	rrr.append('path')
+          .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+        .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+/*
+rrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+dis)/2+3)
+.attr("id", "blueLine3")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].drop; });
+
+*/
+
+// for arrow
+
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+/*
+
+rrr.append("text")
+
+.attr("x" , 115)
+.attr("y", (140+dis)/2+3)
+.attr("id", "blueLine4")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm].unenroll; });
+*/
+
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+var rt=rrr.attr("transform",  " translate("+rec4+") scale(1.2) ");
+
+
+
+
+
+
+
+	} // end of if 1
+
+	else {continue}
+
+
+		} // end of if
+
+
+		else { continue }
+
+
+
+	} // end of p loop
+
+
+
+
+
+for(var p=0; p<data.length; p++)
+			
+			{
+
+			var datac= data[p].country;
+
+if (pj == 1 && jsonc1 == datac  )
+{
+
+		
+if(data[p].year == yr){
+
+expen=data[p].expenditure;
+
+expi[pj]=expen;
+
+
+
+
+				popu= data[p].popu;
+
+				population = data[p].population;
+
+				prim= data[p].primary;
+
+				enrol= data[p].enroll;
+
+				drop= data[p].drop;
+
+				out = data[p].unenroll;
+
+
+				sum= data[p].ensumun;
+
+
+				exp= expp(expen);
+				//en= enr(enrol);
+				dro=dropp(drop);
+
+
+
+
+
+var pm1=p;
+
+//box
+
+var rrr=g.append("g");
+var rr=g.append("g");
+var rrrr=g.append("g");
+ 
+rrr.append("rect")
+.attr("x", 13)
+.attr("y", 55)
+.attr("width", 180)
+.attr("height", 125)
+
+.style("fill", "none") 
+.attr("stroke", "none")
+.attr("stroke-width" , 0.5);
+
+
+
+// for expenditure
+
+rrr.append("rect")
+
+.attr("x" , 14)
+.attr("y" , 115-exp)
+.attr("height" , 1+2*exp)
+.attr("width" , 28)
+.style("fill" , "hotpink")
+.attr("stroke-width", 0.4)
+.attr("stroke", "black");
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+ rrr.append('path')
+.attr("d", bezierLinep3([[42, 115-exp-4], [51.5, 115], [42, 115+exp+4] ]))
+
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "hotpink");
+
+rr.append("text")
+.attr("x" , -35)
+.attr("y", 118)
+.attr("class", "event")
+.text("exp")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+/*
+rr.append("text")
+
+.attr("x" , -35)
+.attr("y", 105)
+.attr("id", "blueLine5")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].expenditure; });
+
+*/
+// for population box
+
+pwidth = d3.scale.linear().range([0, 50]).domain([0, 100 ]);
+pop=pwidth(popu);
+
+rrr.append("rect")
+.attr("x", 52)
+.attr("y", 90)
+		
+.attr("width", 50)
+.attr("height", 50)
+.style("fill" , "beige")
+
+.attr("stroke-width", 1)
+.attr("stroke", "blue");
+
+
+		for(var pp=0;pp<pop;pp++)
+		{
+			rrr.append("line")
+			.attr("x1", 101-pp)
+			.attr("y1", 90)
+			.attr("x2", 101-pp)
+			.attr("y2", 140)
+			.attr("stroke", "blue")
+			.style("stroke-width", 0.5)
+			.style("fill", "none");
+	
+		}
+
+
+rr.append("text")
+.attr("x" , -102)
+.attr("y", 118)
+.attr("class", "event")
+.text("population")
+
+.attr('font-size','8pt')
+.style("text-anchor","start");
+
+/*
+rr.append("text")
+.attr("x" , -64)
+.attr("y", 110)
+.attr("id", "blueLine6")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].popu; });
+
+*/
+
+// enrollment rate
+
+//var enr =d3.scale.linear().range([0, 50]).domain([0, sum]);
+//en= enr(enrol);
+//var dis = [90, 90+en]
+
+
+// primary completion
+
+
+//var primary =d3.scale.linear().range([dis[0],dis[1]]).domain([0, enrol]);
+//var pri = primary(prim);
+//var len= pri-dis[0];
+//var len1= dis[1]-pri;
+
+
+// upward direction 
+
+var primary=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var pri = primary(prim);
+
+var len=90+pri;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+rrr.append('path')
+.attr("d", linear([[102, len], [132+pri, len], [132+pri, 90-20], [132, 90-20],[132,90], [102, 90] ]))
+
+.attr("stroke", "black")
+.attr("stroke-width", 0.5)
+.style("fill", "yellowgreen");
+
+/*
+rrrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+90)/2+3)
+.attr("id", "blueLine7")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].primary; });
+
+*/
+// for arrow
+
+
+var bezierLinep3 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("cardinal-closed");
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[132+pri+2, 90-20], [132-2, 90-20], [((132+pri)+132)/2, 90-30]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "yellowgreen");
+
+
+// downward direction pipe drop out
+
+
+var droop=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var dro = droop(drop);
+var dis = pri+dro+90;
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+       .attr("d", linear([[102, dis], [132+45, dis], [132+45, len], [102, len] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+/*
+rrrr.append("text")
+.attr("x" , 115)
+.attr("y", (len+dis)/2+3)
+.attr("id", "blueLine8")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].drop; });
+
+*/
+// for arrow
+
+var p1=132+45;
+var p2=len-2;
+var p3=132+45+7;
+var p4=((len)+dis)/2;
+var p5= dis+2;
+
+
+
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[p1, p2], [p3, p4], [p1, p5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "darkorange");
+
+
+
+// out of school children or unenroll
+
+//var len2= 140-dis[1];
+//ot = enr(out);
+
+var outof=d3.scale.linear().range([0, 50]).domain([0, sum]);
+
+var ot = outof(out);
+
+
+var linear = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("linear");
+
+	rrr.append('path')
+        .attr("d", linear([[102, 140], [132, 140], [132, 160], [132+ot, 160],[132+ot, dis], [102, dis] ]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+/*
+rrrr.append("text")
+
+.attr("x" , 115)
+.attr("y", (140+dis)/2+3)
+.attr("id", "blueLine9")
+
+.attr('font-size','6pt')
+.attr("class", "expen")
+
+.text(function(d){ return data[pm1].unenroll; });
+
+*/
+
+// for arrow
+
+var po1=132-2;
+var po2=140+20;
+var po3=132+ot+2;
+var po4=((132+ot)+(132))/2;
+var po5= 140+20+8;
+
+	rrr.append('path')
+        .attr("d", bezierLinep3([[po1, po2], [po3, po2], [po4, po5]]))
+	
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5)
+        .style("fill", "crimson");
+
+
+
+var rt=rrr.attr("transform",  " translate("+rec3+") scale(-1.2,1.2) ");
+
+
+rr.attr("transform",  " translate("+rec3+") scale(1.2,1.2)");
+
+
+rrrr.attr("transform",  " translate(335,60) scale(1.2,1.2)");
+
+
+
+
+}
+
+else {continue}
+
+
+} // end of if
+
+
+else { continue }
+
+} // eng of p loop
+
+
+		} // end of pj for loop
+
+
+
+
+});// end of csv file
+
+}); // end of json file
+
+
+} // end of visual
+
+
+
+
+
+
+
+
+</script>
